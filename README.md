@@ -47,3 +47,9 @@ curl -s localhost:8095/v1/chat/completions \
 ```
 
 Muse thinks in `reasoning_content`. Echo both that and `content` on later turns, and give it enough `max_tokens`.
+
+---
+
+**This is a serving configuration for the Intel Arc Pro B70 — not a new model.**
+
+Model and official kquant: [meta-models/Muse-Glimmer-30B](https://huggingface.co/meta-models/Muse-Glimmer-30B) ([GGUF](https://huggingface.co/meta-models/Muse-Glimmer-30B-GGUF)), Apache-2.0, © Meta. Runtime: [llama.cpp](https://github.com/ggml-org/llama.cpp) SYCL + Intel oneAPI. Serving config and B70 kernels: this repo.
