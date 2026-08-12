@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760" role="img" aria-labelledby="title desc">
+  <title id="title">Muse B70 full-context server benchmark</title>
+  <desc id="desc">At 129024 cached tokens, full-SWA decode improved from 10.592 tokens per second to 19.032 tokens per second, a 79.681 percent increase. Greedy output was exactly equal and quality gates passed.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#070a0f"/>
+      <stop offset="0.55" stop-color="#101722"/>
+      <stop offset="1" stop-color="#090d13"/>
+    </linearGradient>
+    <linearGradient id="cyan" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#087e9b"/>
+      <stop offset="1" stop-color="#42dcff"/>
+    </linearGradient>
+    <linearGradient id="bronze" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#75522e"/>
+      <stop offset="1" stop-color="#d7a85e"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="7" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect width="1400" height="760" rx="30" fill="url(#bg)"/>
+  <path d="M0 74H1400M0 686H1400" stroke="#9cdff0" stroke-opacity="0.12"/>
+  <path d="M1040 0V760" stroke="#d7a85e" stroke-opacity="0.1"/>
+
+  <text x="72" y="78" fill="#d7a85e" font-family="ui-monospace, monospace" font-size="19" letter-spacing="4">MUSE B70 / CANONICAL SERVER RECEIPT</text>
+  <text x="72" y="130" fill="#f2f5f7" font-family="ui-sans-serif, sans-serif" font-size="42" font-weight="700">Full-context decode, without the masked prefix tax</text>
+  <text x="72" y="169" fill="#93a6b5" font-family="ui-sans-serif, sans-serif" font-size="21">129,024-token frozen fixture  |  full-SWA  |  np=1  |  f16 KV  |  256 sampled output tokens</text>
+
+  <text x="82" y="238" fill="#8ca0af" font-family="ui-sans-serif, sans-serif" font-size="17">TOKENS / SECOND</text>
+  <line x1="250" y1="220" x2="250" y2="535" stroke="#8ca0af" stroke-opacity="0.35"/>
+  <line x1="250" y1="535" x2="925" y2="535" stroke="#8ca0af" stroke-opacity="0.35"/>
+  <g fill="#62717d" font-family="ui-monospace, monospace" font-size="14">
+    <text x="243" y="558" text-anchor="middle">0</text>
+    <text x="412" y="558" text-anchor="middle">5</text>
+    <text x="581" y="558" text-anchor="middle">10</text>
+    <text x="750" y="558" text-anchor="middle">15</text>
+    <text x="919" y="558" text-anchor="middle">20</text>
+  </g>
+  <g stroke="#ffffff" stroke-opacity="0.06">
+    <line x1="419" y1="220" x2="419" y2="535"/>
+    <line x1="588" y1="220" x2="588" y2="535"/>
+    <line x1="757" y1="220" x2="757" y2="535"/>
+    <line x1="925" y1="220" x2="925" y2="535"/>
+  </g>
+
+  <g font-family="ui-sans-serif, sans-serif">
+    <text x="82" y="305" fill="#aeb9c2" font-size="20">bounds OFF</text>
+    <rect x="250" y="274" width="358" height="48" rx="9" fill="#2a3440"/>
+    <text x="625" y="306" fill="#d9e0e5" font-size="23" font-weight="700">10.592</text>
+
+    <text x="82" y="405" fill="#aeb9c2" font-size="20">early scanner</text>
+    <rect x="250" y="374" width="584" height="48" rx="9" fill="url(#bronze)" opacity="0.9"/>
+    <text x="851" y="406" fill="#f1ddba" font-size="23" font-weight="700">17.292</text>
+
+    <text x="82" y="505" fill="#ecf8fb" font-size="20" font-weight="700">ship scanner</text>
+    <rect x="250" y="474" width="643" height="48" rx="9" fill="url(#cyan)" filter="url(#glow)"/>
+    <text x="910" y="506" fill="#87eaff" font-size="25" font-weight="800">19.032</text>
+  </g>
+
+  <rect x="1000" y="220" width="330" height="142" rx="20" fill="#111d26" stroke="#42dcff" stroke-opacity="0.55"/>
+  <text x="1032" y="266" fill="#8ca0af" font-family="ui-sans-serif, sans-serif" font-size="17">FULL-SWA GAIN</text>
+  <text x="1032" y="328" fill="#42dcff" font-family="ui-sans-serif, sans-serif" font-size="54" font-weight="800">+79.681%</text>
+
+  <rect x="1000" y="386" width="330" height="142" rx="20" fill="#151a20" stroke="#d7a85e" stroke-opacity="0.45"/>
+  <text x="1032" y="432" fill="#8ca0af" font-family="ui-sans-serif, sans-serif" font-size="17">129K PRIME</text>
+  <text x="1032" y="486" fill="#f2f5f7" font-family="ui-sans-serif, sans-serif" font-size="39" font-weight="750">503.19 t/s</text>
+  <text x="1032" y="514" fill="#8ca0af" font-family="ui-sans-serif, sans-serif" font-size="15">256.46 seconds</text>
+
+  <rect x="72" y="605" width="1258" height="82" rx="18" fill="#0c141b" stroke="#88a0af" stroke-opacity="0.18"/>
+  <circle cx="107" cy="646" r="10" fill="#43d89e"/>
+  <text x="132" y="652" fill="#d8e4e8" font-family="ui-sans-serif, sans-serif" font-size="19" font-weight="700">QUALITY HELD</text>
+  <text x="300" y="652" fill="#9fb0bc" font-family="ui-monospace, monospace" font-size="17">greedy tokens exact</text>
+  <text x="554" y="652" fill="#9fb0bc" font-family="ui-monospace, monospace" font-size="17">KLD 0.000494</text>
+  <text x="752" y="652" fill="#9fb0bc" font-family="ui-monospace, monospace" font-size="17">same-top 99.240%</text>
+  <text x="1017" y="652" fill="#9fb0bc" font-family="ui-monospace, monospace" font-size="17">greedy 19.399 t/s</text>
+  <text x="72" y="724" fill="#566773" font-family="ui-monospace, monospace" font-size="13">Source: results/fullctx-server-final-20260812T1605Z + fullctx-server-wide-final-20260812T163904Z</text>
+</svg>

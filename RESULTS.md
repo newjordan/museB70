@@ -1,5 +1,13 @@
 # Muse Glimmer 30B on B70 — serving-config campaign receipts
 
+<p align="center">
+  <img src="assets/brand/muse-b70-poster.png" alt="A marble Muse standing in a tech-noir B70 compute temple" width="48%">
+</p>
+
+These are receipt-backed measurements, including negative results and
+quality controls. Decorative artwork is kept separate from the benchmark
+plots; every number in the plots below maps to a checked-in result file.
+
 Campaign 2026-08-11/12. All benches under the lx GPU lock via
 `scripts/bench-sweep.sh` (ab-crossmodel.sh pattern: loader assert, JSON
 receipts in `results/sweep-20260811/`). Model:
@@ -142,6 +150,8 @@ prompt, temp 0, 64 tokens), mc-off vs mc-on: **token-identical**
 
 ## Multi-slot knee (batched-bench, fix ON, npp512/ntg128)
 
+![Muse B70 multi-slot decode knee, showing 28.49 aggregate tokens per second at one seat and only 45.32 at eight seats](assets/bench/single-seat-scaling.svg)
+
 | slots | S_PP agg | S_TG agg | TG per-stream |
 |---|---|---|---|
 | 1 | 889 | 28.4 | 28.4 |
@@ -255,6 +265,8 @@ nondeterminism:
   not evidence of a semantic quality shortcut.
 
 ### Final clean wide-scanner promotion
+
+![Muse B70 full-context server benchmark, showing the final wide scanner at 19.032 tokens per second and exact greedy output](assets/bench/fullctx-server.svg)
 
 The final build was run in a fresh server against the same frozen fixture and
 OFF controls. Each continuation reused 129023 cached tokens and evaluated

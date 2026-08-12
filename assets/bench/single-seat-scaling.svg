@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="690" viewBox="0 0 1400 690" role="img" aria-labelledby="title desc">
+  <title id="title">Muse B70 multi-slot decode scaling</title>
+  <desc id="desc">Aggregate decode rises from 28.49 tokens per second at one slot to 45.32 at eight slots, only 1.59 times, while per-seat throughput falls to 5.67. The production profile therefore uses one seat.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#080b10"/>
+      <stop offset="1" stop-color="#111923"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#087e9b"/>
+      <stop offset="1" stop-color="#42dcff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1400" height="690" rx="30" fill="url(#bg)"/>
+  <text x="72" y="77" fill="#d7a85e" font-family="ui-monospace, monospace" font-size="19" letter-spacing="4">MUSE B70 / BATCHED DECODE KNEE</text>
+  <text x="72" y="130" fill="#f1f4f6" font-family="ui-sans-serif, sans-serif" font-size="42" font-weight="700">One seat keeps the whole machine responsive</text>
+  <text x="72" y="168" fill="#92a4b1" font-family="ui-sans-serif, sans-serif" font-size="20">Warmed Q4_K decode  |  npp=512  |  ntg=128  |  c=16384  |  aggregate throughput</text>
+
+  <line x1="112" y1="526" x2="925" y2="526" stroke="#9eb2bf" stroke-opacity="0.3"/>
+  <g font-family="ui-sans-serif, sans-serif">
+    <rect x="160" y="326" width="130" height="200" rx="10" fill="url(#bar)"/>
+    <text x="225" y="304" text-anchor="middle" fill="#e7f9fd" font-size="25" font-weight="750">28.49</text>
+    <text x="225" y="565" text-anchor="middle" fill="#dbe4e9" font-size="20">1 seat</text>
+    <text x="225" y="593" text-anchor="middle" fill="#42dcff" font-size="16">28.49 / seat</text>
+
+    <rect x="370" y="266" width="130" height="260" rx="10" fill="url(#bar)" opacity="0.86"/>
+    <text x="435" y="244" text-anchor="middle" fill="#e7f9fd" font-size="25" font-weight="750">37.08</text>
+    <text x="435" y="565" text-anchor="middle" fill="#dbe4e9" font-size="20">2 seats</text>
+    <text x="435" y="593" text-anchor="middle" fill="#89a5b3" font-size="16">18.54 / seat</text>
+
+    <rect x="580" y="230" width="130" height="296" rx="10" fill="url(#bar)" opacity="0.72"/>
+    <text x="645" y="208" text-anchor="middle" fill="#e7f9fd" font-size="25" font-weight="750">42.22</text>
+    <text x="645" y="565" text-anchor="middle" fill="#dbe4e9" font-size="20">4 seats</text>
+    <text x="645" y="593" text-anchor="middle" fill="#89a5b3" font-size="16">10.56 / seat</text>
+
+    <rect x="790" y="208" width="130" height="318" rx="10" fill="url(#bar)" opacity="0.6"/>
+    <text x="855" y="186" text-anchor="middle" fill="#e7f9fd" font-size="25" font-weight="750">45.32</text>
+    <text x="855" y="565" text-anchor="middle" fill="#dbe4e9" font-size="20">8 seats</text>
+    <text x="855" y="593" text-anchor="middle" fill="#89a5b3" font-size="16">5.67 / seat</text>
+  </g>
+
+  <rect x="1000" y="216" width="320" height="168" rx="22" fill="#111d26" stroke="#42dcff" stroke-opacity="0.5"/>
+  <text x="1034" y="263" fill="#8da1af" font-family="ui-sans-serif, sans-serif" font-size="17">8-SEAT AGGREGATE</text>
+  <text x="1034" y="326" fill="#42dcff" font-family="ui-sans-serif, sans-serif" font-size="54" font-weight="800">1.59x</text>
+  <text x="1034" y="357" fill="#91a7b4" font-family="ui-sans-serif, sans-serif" font-size="16">not 8x</text>
+
+  <rect x="1000" y="408" width="320" height="150" rx="22" fill="#17191d" stroke="#d7a85e" stroke-opacity="0.52"/>
+  <text x="1034" y="453" fill="#d7a85e" font-family="ui-monospace, monospace" font-size="17">SHIP DECISION</text>
+  <text x="1034" y="505" fill="#f2f4f5" font-family="ui-sans-serif, sans-serif" font-size="35" font-weight="750">-np 1</text>
+  <text x="1034" y="534" fill="#98a8b2" font-family="ui-sans-serif, sans-serif" font-size="15">single-seat latency first</text>
+
+  <text x="72" y="645" fill="#566773" font-family="ui-monospace, monospace" font-size="13">Source: results/kernel-20260812/deployed-knee.txt; first B=1 row discarded as warmup</text>
+</svg>

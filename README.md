@@ -8,6 +8,20 @@ Serving config project for **Muse Glimmer 30B** (Meta, day-0 release 2026-08-11)
 dense 28B, Q4_K_M (`/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf`,
 15.6 GB), served at the **full 131072-token trained context** on the B70.
 
+<table>
+  <tr>
+    <td width="31%"><img src="assets/brand/muse-b70-emblem.png" alt="Muse B70 marble-and-bronze emblem"></td>
+    <td width="69%">
+      <h3>One seat. Full context. Verified output.</h3>
+      <p><strong>19.032 t/s</strong> sampled server decode at 129,024 cached tokens.<br>
+      <strong>503.19 t/s</strong> full-context prime.<br>
+      <strong>+79.681%</strong> full-SWA decode from the shipped mask-bounds kernel.<br>
+      <strong>Exact</strong> greedy token and content parity against both controls.<br>
+      <strong>0.000494 KLD / 99.240% same-top</strong> broad quality gate.</p>
+    </td>
+  </tr>
+</table>
+
 ## Quick start
 
 ```bash
@@ -165,6 +179,11 @@ probability drift, and source-receipt immutability.
 
 ## Measured (receipts in `results/`, RESULTS.md for the story)
 
+![Full-context Muse B70 server benchmark: 19.032 tokens per second at 129024 cached tokens, 79.681 percent faster than bounds-off](assets/bench/fullctx-server.svg)
+
+Every headline number above is tied to the frozen 129,024-token fixture and
+the checked-in server receipts; the plot is not a synthetic projection.
+
 Champion-binary sweep, 2026-08-11 (pp512/tg128 r5; depth legs r2-3):
 
 | leg | pp512 | pp4096 | tg128 |
@@ -213,6 +232,8 @@ so -np 1; see RESULTS.md knee table). `--swa-full` (+~5 GiB) makes edited /
 regenerated turns reuse cache to the divergence point instead of full
 re-prefill (642 vs 2664 tokens in the A/B). The production launcher fixes
 this full-SWA profile.
+
+![Muse B70 multi-slot scaling: aggregate throughput rises only 1.59 times from one to eight seats, supporting the single-seat production profile](assets/bench/single-seat-scaling.svg)
 
 Server reality must be reported by cache mode:
 
