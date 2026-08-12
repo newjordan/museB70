@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/brand/muse-b70-hero.png" alt="Muse B70 — neoclassical marble Muse in a tech-noir compute sanctuary" width="100%">
+</p>
+
 # muse — Muse Glimmer 30B serving on the Arc Pro B70
 
 Serving config project for **Muse Glimmer 30B** (Meta, day-0 release 2026-08-11):
