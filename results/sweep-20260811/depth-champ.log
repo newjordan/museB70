@@ -1,0 +1,5 @@
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=1
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)

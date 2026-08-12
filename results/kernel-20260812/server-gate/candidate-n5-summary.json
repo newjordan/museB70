@@ -1,0 +1,32 @@
+[
+  {
+    "content_bytes": 287,
+    "elapsed_s": 14.746136629997636,
+    "n_tokens": 64,
+    "slot": 0
+  },
+  {
+    "content_bytes": 324,
+    "elapsed_s": 14.746443800002453,
+    "n_tokens": 64,
+    "slot": 1
+  },
+  {
+    "content_bytes": 287,
+    "elapsed_s": 14.633862362999935,
+    "n_tokens": 64,
+    "slot": 2
+  },
+  {
+    "content_bytes": 323,
+    "elapsed_s": 14.801726937999774,
+    "n_tokens": 64,
+    "slot": 3
+  },
+  {
+    "content_bytes": 306,
+    "elapsed_s": 14.802568184000847,
+    "n_tokens": 64,
+    "slot": 4
+  }
+]

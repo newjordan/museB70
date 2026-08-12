@@ -1,0 +1,3 @@
+control-a vs control-b: 8/8 token+content identical
+control-a vs candidate-off: 8/8 token+content identical
+control-a vs candidate-on: 8/8 token+content identical

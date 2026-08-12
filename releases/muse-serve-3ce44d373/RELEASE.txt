@@ -1,0 +1,7 @@
+Muse Glimmer 30B B70 serving release
+kernel_commit=3ce44d373c3fe2b2f4c88f196f9d063d3eefb267
+model_sha256=7e9b74b7c8875e9e265695df9613bf6290f2392e479ce740495a129019c488d8
+model_size=16756681056
+fixture_token_sha256=893c12231ab1360f5f1d6ff0b78ab7568142e856b5526c27fd323a32dd35872e
+fullctx_receipt=/home/frosty40/turbo/muse/results/fullctx-server-wide-final-20260812T163904Z
+kld_receipt=/home/frosty40/turbo/lx/results/crossmodel-20260811/muse-fullctx-bounds-final-20260812T163521Z.kld

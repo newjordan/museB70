@@ -1,0 +1,44 @@
+[serve-muse] 2026-08-12T06:27:43Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.108.783 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.109.203 W srv  llama_server: -----------------
+0.00.109.205 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.109.205 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.109.205 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.109.205 W srv  llama_server: -----------------
+0.00.110.429 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.740.756 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.740.765 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.743.114 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.10.139.154 W llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.390.986 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.392.781 W spec common_specu: ngram_mod n_match=8 is too small - poor quality is possible, see: https://github.com/ggml-org/llama.cpp/pull/19164
+0.12.396.074 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.396.108 I srv  llama_server: model loaded
+0.12.396.113 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.994.770 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.994.806 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.19.184.429 I slot print_timing: id  0 | task 0 | n_decoded =    100, tg =  28.28 t/s, tg_3s =  28.28 t/s
+0.22.213.386 I slot print_timing: id  0 | task 0 | n_decoded =    185, tg =  28.18 t/s, tg_3s =  28.06 t/s
+0.24.742.936 I slot print_timing: id  0 | task 0 | prompt eval time =    1653.36 ms /  1386 tokens (    1.19 ms per token,   838.29 tokens per second)
+0.24.742.940 I slot print_timing: id  0 | task 0 |        eval time =    9094.75 ms /   256 tokens (   35.53 ms per token,    28.15 tokens per second)
+0.24.742.941 I slot print_timing: id  0 | task 0 |       total time =   10748.11 ms /  1642 tokens
+0.24.742.943 I slot print_timing: id  0 | task 0 |    graphs reused =        254
+0.24.743.037 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1641, truncated = 0
+0.24.746.568 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 34114473371
+0.24.803.719 I slot launch_slot_: id  0 | task 257 | processing task, is_child = 0
+0.31.561.223 I slot print_timing: id  0 | task 257 | n_decoded =    107, tg =  18.56 t/s, tg_3s =  18.56 t/s
+0.34.802.254 I slot print_timing: id  0 | task 257 | n_decoded =    166, tg =  18.43 t/s, tg_3s =  18.20 t/s
+0.37.819.373 I slot print_timing: id  0 | task 257 | n_decoded =    224, tg =  18.63 t/s, tg_3s =  19.22 t/s
+0.39.751.743 I slot print_timing: id  0 | task 257 | prompt eval time =     992.05 ms /  1101 tokens (    0.90 ms per token,  1109.83 tokens per second)
+0.39.751.750 I slot print_timing: id  0 | task 257 |        eval time =   13955.95 ms /   256 tokens (   54.52 ms per token,    18.34 tokens per second)
+0.39.751.751 I slot print_timing: id  0 | task 257 |       total time =   14948.00 ms /  1357 tokens
+0.39.751.751 I slot print_timing: id  0 | task 257 |    graphs reused =        333
+0.39.751.759 I slot print_timing: id  0 | task 257 | draft acceptance = 0.15912 (  137 accepted /   861 generated), mean len =  5.89
+0.39.751.805 I slot      release: id  0 | task 257 | stop processing: n_tokens = 1356, truncated = 0
+0.39.759.104 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0

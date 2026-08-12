@@ -1,0 +1,20 @@
+0.00.073.272 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.073.697 W srv  llama_server: -----------------
+0.00.073.699 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.073.700 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.073.700 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.073.700 W srv  llama_server: -----------------
+0.00.074.942 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.688.740 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.688.744 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.690.993 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.10.369.552 W llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-q4-k-ncols-hoist] active ncols_dst=2 ncols=6656 nrows=4096
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.28.758.018 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.28.761.326 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.28.761.358 I srv  llama_server: model loaded
+0.28.761.362 I srv  llama_server: listening on http://127.0.0.1:18097
+0.36.623.316 I srv    operator(): operator(): cleaning up before exit...

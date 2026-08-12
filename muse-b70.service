@@ -1,0 +1,39 @@
+# Muse Glimmer 30B serving on the Arc Pro B70 — systemd user unit TEMPLATE.
+# Install (only when you want it managed by systemd):
+#   cp /home/frosty40/turbo/muse/muse-b70.service ~/.config/systemd/user/
+#   systemctl --user daemon-reload
+#   systemctl --user start muse-b70    # add `enable` for boot persistence
+#
+# HARD CONSTRAINT: the B70 is a single exclusive device. Concurrent Level-Zero
+# clients wedge the xe driver (xe_validation_lock / device-lost — see
+# lx/env.sh). Do NOT run this while laguna serving (:8092), the treebeard
+# stack (:8093/:8094), or any llama-bench/GPU job is active.
+[Unit]
+Description=Muse Glimmer 30B on Arc Pro B70 (llama-server :8095)
+Conflicts=treebeard-b70-ship.service treebeard-b70-agent.service qwen36-q5-turbo.service
+After=network-online.target
+StartLimitIntervalSec=300
+StartLimitBurst=3
+
+[Service]
+Type=exec
+UMask=0077
+Environment=SERVE_HOST=127.0.0.1
+# Keep service output in quota-managed journald rather than an unbounded file.
+Environment=SERVE_LOG=journal
+# For a TLS reverse proxy, keep this listener on localhost. If direct trusted
+# LAN HTTP is explicitly required, use SERVE_ALLOW_INSECURE_NETWORK=1 and put
+# only SERVE_API_KEY_FILE=/private/mode-600/path in this private env file.
+# EnvironmentFile=-%h/.config/muse-b70.env
+ExecStartPre=/usr/bin/bash /home/frosty40/turbo/muse/serve-muse.sh --check
+ExecStart=/usr/bin/bash /home/frosty40/turbo/muse/serve-muse.sh
+Restart=on-failure
+RestartSec=10
+RestartPreventExitStatus=2 3 75
+TimeoutStopSec=45
+NoNewPrivileges=true
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

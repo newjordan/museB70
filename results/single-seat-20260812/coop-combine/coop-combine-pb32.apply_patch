@@ -1,0 +1,155 @@
+*** Begin Patch
+*** Update File: ggml/src/ggml-sycl/fattn-common.hpp
+@@
+     *dst = dst_val / rowsum;
+ }
+ 
++// [lx-fattn-coop-combine-pb32] The PB=32, D=128 decode combine repeats the
++// same max/exp work in all 128 lanes.  Compute the 32 scales once across the
++// work-group, then retain the stock per-output, l=0..31 accumulation order.
++// This is a separate kernel so an unset gate leaves the stock device path
++// untouched.
++static void flash_attn_combine_results_cooperative_pb32_d128(
++        const float * __restrict__ VKQ_parts,
++        const sycl::float2 * __restrict__ VKQ_meta,
++        float * __restrict__ dst,
++        float * shared_scales_rowsums) {
++    constexpr int D               = 128;
++    constexpr int parallel_blocks = 32;
++
++    // Dimension 0: threadIdx.x
++    // Dimension 1: blockIdx.x
++    // Dimension 2: blockIdx.y
++    // Dimension 3: blockIdx.z
++    // Memory layout is permuted with [0, 2, 1, 3]
++    auto      item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
++    const int ne01     = item_ct1.get_group_range(2);
++    const int ne02     = item_ct1.get_group_range(1);
++
++    const int col      = item_ct1.get_group(2);
++    const int head     = item_ct1.get_group(1);
++    const int sequence = item_ct1.get_group(0);
++
++    const int j_dst_unrolled = (sequence*ne01 + col)*ne02 + head;
++
++    VKQ_parts += j_dst_unrolled * parallel_blocks*D;
++    VKQ_meta  += j_dst_unrolled * parallel_blocks;
++    dst       += j_dst_unrolled *                 D;
++
++    const int tid = item_ct1.get_local_id(2);
++    __builtin_assume(tid < D);
++
++    // Keep the stock l=0..31 max order.  Work-group broadcast is legal here:
++    // every work-item reaches the collective on the same control-flow path.
++    float kqmax = 0.0f;
++    if (tid == 0) {
++        kqmax = VKQ_meta[0].x();
++#pragma unroll
++        for (int l = 1; l < parallel_blocks; ++l) {
++            kqmax = sycl::max(kqmax, VKQ_meta[l].x());
++        }
++    }
++    kqmax = sycl::group_broadcast(item_ct1.get_group(), kqmax);
++
++    float * scales  = shared_scales_rowsums;
++    float * rowsums = shared_scales_rowsums + parallel_blocks;
++    if (tid < parallel_blocks) {
++        const sycl::float2 meta = VKQ_meta[tid];
++        scales[tid]  = sycl::native::exp(meta.x() - kqmax);
++        rowsums[tid] = meta.y();
++    }
++
++    // Publish both arrays before any lane starts its sequential combine.
++    item_ct1.barrier(sycl::access::fence_space::local_space);
++
++    float VKQ_numerator   = 0.0f;
++    float VKQ_denominator = 0.0f;
++#pragma unroll
++    for (int l = 0; l < parallel_blocks; ++l) {
++        const float KQ_max_scale = scales[l];
++        VKQ_numerator   += KQ_max_scale * VKQ_parts[l*D + tid];
++        VKQ_denominator += KQ_max_scale * rowsums[l];
++    }
++
++    dst[tid] = VKQ_numerator / VKQ_denominator;
++}
++
+ template <int D>  // D == head size
+ 
+ static void flash_attn_combine_results(const float * __restrict__ VKQ_parts,
+@@
+     } else if (parallel_blocks > 1) {
+         const dpct::dim3 block_dim_combine(DV, 1, 1);
+         const dpct::dim3 blocks_num_combine(Q->ne[1], Q->ne[2], Q->ne[3]);
+         const size_t     nbytes_shared_combine = parallel_blocks * sizeof(sycl::float2);
+-        main_stream->submit([&](sycl::handler & cgh) {
+-            sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(nbytes_shared_combine), cgh);
+-
+-            auto dst_tmp_ptr_ct0      = dst_tmp.ptr;
+-            auto dst_tmp_meta_ptr_ct1 = dst_tmp_meta.ptr;
+-            auto KQV_data_ct2         = (float *) KQV->data;
+-
+-            cgh.parallel_for(sycl::nd_range<3>(blocks_num_combine * block_dim_combine, block_dim_combine),
+-                             [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
+-                                 GGML_UNUSED(item_ct1);
+-                                 flash_attn_combine_results<DV>(
+-                                     dst_tmp_ptr_ct0, dst_tmp_meta_ptr_ct1, KQV_data_ct2, parallel_blocks,
+-                                     dpct_local_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
+-                             });
+-        });
++
++        // Opt-in only, and deliberately narrower than the generic combine:
++        // D=128 at compile time, PB=32 and single-token decode at runtime.
++        static const bool lx_fattn_coop_combine_pb32 = []() {
++            const char * e = getenv("GGML_SYCL_LX_FATTN_COOP_COMBINE_PB32");
++            return e != nullptr && e[0] != '\0' && e[0] != '0';
++        }();
++
++        bool submitted_cooperative = false;
++        if constexpr (DV == 128) {
++            if (lx_fattn_coop_combine_pb32 && parallel_blocks == 32 && Q->ne[1] == 1) {
++                constexpr int lx_parallel_blocks = 32;
++                main_stream->submit([&](sycl::handler & cgh) {
++                    // A float accessor supplies proper float alignment; the two
++                    // 32-float regions do not alias.
++                    sycl::local_accessor<float, 1> shared_acc_ct1(sycl::range<1>(2*lx_parallel_blocks), cgh);
++
++                    auto dst_tmp_ptr_ct0      = dst_tmp.ptr;
++                    auto dst_tmp_meta_ptr_ct1 = dst_tmp_meta.ptr;
++                    auto KQV_data_ct2         = (float *) KQV->data;
++
++                    cgh.parallel_for(sycl::nd_range<3>(blocks_num_combine * block_dim_combine, block_dim_combine),
++                                     [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
++                                         GGML_UNUSED(item_ct1);
++                                         flash_attn_combine_results_cooperative_pb32_d128(
++                                             dst_tmp_ptr_ct0, dst_tmp_meta_ptr_ct1, KQV_data_ct2,
++                                             shared_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
++                                     });
++                });
++                submitted_cooperative = true;
++            }
++        }
++
++        if (!submitted_cooperative) {
++            // Exact pre-existing device path for gate-off and all unsupported
++            // shapes/parallel widths.
++            main_stream->submit([&](sycl::handler & cgh) {
++                sycl::local_accessor<uint8_t, 1> dpct_local_acc_ct1(sycl::range<1>(nbytes_shared_combine), cgh);
++
++                auto dst_tmp_ptr_ct0      = dst_tmp.ptr;
++                auto dst_tmp_meta_ptr_ct1 = dst_tmp_meta.ptr;
++                auto KQV_data_ct2         = (float *) KQV->data;
++
++                cgh.parallel_for(sycl::nd_range<3>(blocks_num_combine * block_dim_combine, block_dim_combine),
++                                 [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
++                                     GGML_UNUSED(item_ct1);
++                                     flash_attn_combine_results<DV>(
++                                         dst_tmp_ptr_ct0, dst_tmp_meta_ptr_ct1, KQV_data_ct2, parallel_blocks,
++                                         dpct_local_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
++                                 });
++            });
++        }
+     }
+     SYCL_CHECK(0);
+ }
+*** End Patch

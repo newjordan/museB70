@@ -1,0 +1,13 @@
+{
+  "arm": "off-a",
+  "fixture": "/home/frosty40/turbo/muse/results/fixtures/muse-wikitext-train-129024.tokens.json",
+  "fixture_tokens_sha256": "893c12231ab1360f5f1d6ff0b78ab7568142e856b5526c27fd323a32dd35872e",
+  "prime_elapsed_s": 256.4780089880078,
+  "quality_elapsed_s": 3.125395896000555,
+  "quality_predicted_per_second": 10.819700510689863,
+  "quality_tokens_sha256": "a9e489512cb481b27e4940bf62ee44ea8a096491724714bea0a0a371d2c41fad",
+  "ship_elapsed_s": 24.343855450002593,
+  "ship_predicted_per_second": 10.587485509413142,
+  "ship_tokens_sha256": "418f02f65a2edad1d16a7c494f42b27579df377c77b7a95461bee56d13d9d1f3",
+  "token_count": 129024
+}

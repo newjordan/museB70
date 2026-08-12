@@ -1,0 +1,72 @@
+Build with Macros:
+  GGML_SYCL_DNNL: yes
+  GGML_SYCL_F16: yes
+  GGML_SYCL_FORCE_MMQ: no
+  GGML_SYCL_GRAPH: yes
+  GGML_SYCL_SUPPORT_LEVEL_ZERO_API: yes
+  GGML_SYCL_SUPPORT_VMM: yes
+Running with Environment Variables:
+  GGML_SYCL_DEBUG: 0
+  GGML_SYCL_DEV2DEV_MEMCPY: 0 (SYCL API)
+  GGML_SYCL_ENABLE_DNN: 1
+  GGML_SYCL_FA_ONEDNN: 1
+  GGML_SYCL_FA_ONEDNN_MAX_KV: 0
+  GGML_SYCL_ENABLE_FLASH_ATTN: 1
+  GGML_SYCL_ENABLE_GRAPH: 0
+  GGML_SYCL_ENABLE_OPT: 1
+  GGML_SYCL_ENABLE_VMM: 1
+  GGML_SYCL_ENABLE_FUSION: 1
+  GGML_SYCL_PRIORITIZE_DMMV: 0
+  GGML_SYCL_USE_ASYNC_MEM_OP: 1
+  GGML_SYCL_USE_LEVEL_ZERO_API: 1
+  GGML_SYCL_USM_SYSTEM: 0
+Found 1 SYCL devices:
+|  |                   |                                       |       |Max    |        |Max  |Global |                     |
+|  |                   |                                       |       |compute|Max work|sub  |mem    |                     |
+|ID|        Device Type|                                   Name|Version|units  |group   |group|size   |       Driver version|
+|--|-------------------|---------------------------------------|-------|-------|--------|-----|-------|---------------------|
+| 0| [level_zero:gpu:0]|             Intel Arc Pro B70 Graphics|   20.2|    256|    1024|   32| 34242M|         1.15.38308+1|
+SYCL Optimization Feature:
+|ID|        Device Type|Reorder|
+|--|-------------------|-------|
+| 0| [level_zero:gpu:0]|      Y|
+[lx-q4-k-ncols-hoist] active ncols_dst=2 ncols=6656 nrows=4096
+Testing 2 devices
+
+Backend 1/2: SYCL0
+  Device description: Intel(R) Arc(TM) Pro B70 Graphics
+  Device memory: 32656 MB (32569 MB free)
+
+  MUL_MAT(type=f32,ne=[4096,2,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,2,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=3 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,3,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,3,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=4 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,4,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,4,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=5 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,5,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,5,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=6 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,6,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,6,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=7 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,7,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,7,1,1]): [lx-q4-k-ncols-hoist] active ncols_dst=8 ncols=6656 nrows=4096
+[1;32mOK[0m
+  MUL_MAT(type=f32,ne=[4096,8,1,1],op_params=[],sources=q4_K[6656,4096,1,1],f32[6656,8,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,2,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,2,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,3,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,3,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,4,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,4,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,5,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,5,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,6,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,6,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,7,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,7,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[256,8,1,1],op_params=[],sources=q4_K[6656,256,1,1],f32[6656,8,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,2,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,2,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,3,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,3,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,4,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,4,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,5,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,5,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,6,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,6,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,7,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,7,1,1]): [1;32mOK[0m
+  MUL_MAT(type=f32,ne=[19968,8,1,1],op_params=[],sources=q4_K[6656,19968,1,1],f32[6656,8,1,1]): [1;32mOK[0m
+  21/21 tests passed
+  Backend SYCL0: [1;32mOK[0m
+Backend 2/2: CPU
+  Skipping
+2/2 backends passed
+[1;32mOK[0m

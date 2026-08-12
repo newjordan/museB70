@@ -1,0 +1,41 @@
+[serve-muse] 2026-08-12T06:25:42Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.072.841 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.073.310 W srv  llama_server: -----------------
+0.00.073.313 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.073.313 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.073.313 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.073.313 W srv  llama_server: -----------------
+0.00.074.557 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.708.869 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.708.880 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.711.188 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.10.477.885 W llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.719.777 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.725.037 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.725.072 I srv  llama_server: model loaded
+0.12.725.076 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.996.063 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.996.095 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.19.190.791 I slot print_timing: id  0 | task 0 | n_decoded =    100, tg =  28.21 t/s, tg_3s =  28.21 t/s
+0.22.222.208 I slot print_timing: id  0 | task 0 | n_decoded =    185, tg =  28.13 t/s, tg_3s =  28.04 t/s
+0.24.751.963 I slot print_timing: id  0 | task 0 | prompt eval time =    1649.22 ms /  1386 tokens (    1.19 ms per token,   840.40 tokens per second)
+0.24.751.966 I slot print_timing: id  0 | task 0 |        eval time =    9106.62 ms /   256 tokens (   35.57 ms per token,    28.11 tokens per second)
+0.24.751.967 I slot print_timing: id  0 | task 0 |       total time =   10755.84 ms /  1642 tokens
+0.24.751.969 I slot print_timing: id  0 | task 0 |    graphs reused =        254
+0.24.752.065 I slot      release: id  0 | task 0 | stop processing: n_tokens = 1641, truncated = 0
+0.24.755.714 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = 33993787837
+0.24.813.800 I slot launch_slot_: id  0 | task 257 | processing task, is_child = 0
+0.29.335.118 I slot print_timing: id  0 | task 257 | n_decoded =    100, tg =  28.33 t/s, tg_3s =  28.33 t/s
+0.32.357.273 I slot print_timing: id  0 | task 257 | n_decoded =    185, tg =  28.23 t/s, tg_3s =  28.13 t/s
+0.34.888.345 I slot print_timing: id  0 | task 257 | prompt eval time =     990.96 ms /  1101 tokens (    0.90 ms per token,  1111.04 tokens per second)
+0.34.888.349 I slot print_timing: id  0 | task 257 |        eval time =    9083.56 ms /   256 tokens (   35.48 ms per token,    28.18 tokens per second)
+0.34.888.350 I slot print_timing: id  0 | task 257 |       total time =   10074.53 ms /  1357 tokens
+0.34.888.350 I slot print_timing: id  0 | task 257 |    graphs reused =        507
+0.34.888.396 I slot      release: id  0 | task 257 | stop processing: n_tokens = 1356, truncated = 0
+0.34.895.859 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0

@@ -1,0 +1,11 @@
+0.00.403.677 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.403.682 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.406.254 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+[lx-q4-k-ncols-hoist] active ncols_dst=2 ncols=6656 nrows=4096
+[lx-q4-k-ncols-hoist] active ncols_dst=4 ncols=6656 nrows=4096
+[lx-q4-k-ncols-hoist] active ncols_dst=8 ncols=6656 nrows=4096
+LX_DIAG_COUNTS tiny=0 large=0 skip=0

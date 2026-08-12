@@ -1,0 +1,22 @@
+# Machine-local agent configuration and secrets.
+/.claude/
+/.env
+*.key
+
+# Generated Python state.
+__pycache__/
+*.py[cod]
+
+# Oversized diagnostics and reproducible runtime payloads.
+/results/cli-diag.out
+/results/ktrace-fast/
+/results/ktrace-slow/
+/results/profile-decode/
+/results/profile-prefill/
+/results/fullctx-server-final-20260812T1605Z/fixture-tokenize.json
+/results/fullctx-server-final-20260812T1605Z/fixture-tokenize.raw.json
+/releases/*/bin/
+
+# Failed intermediate smoke attempt; the succeeding receipt is tracked.
+/results/serve-release-history-quality-20260812T1750Z.log
+/results/serve-release-history-quality-20260812T1750Z.md

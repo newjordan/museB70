@@ -1,0 +1,50 @@
+[
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.736515788004908,
+    "n_tokens": 8,
+    "slot": 0
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.737142662001133,
+    "n_tokens": 8,
+    "slot": 1
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.559374513002695,
+    "n_tokens": 8,
+    "slot": 2
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.7370163629966555,
+    "n_tokens": 8,
+    "slot": 3
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.737062902000616,
+    "n_tokens": 8,
+    "slot": 4
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.737353668999276,
+    "n_tokens": 8,
+    "slot": 5
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.560656531997665,
+    "n_tokens": 8,
+    "slot": 6
+  },
+  {
+    "content_bytes": 19,
+    "elapsed_s": 5.737139946999378,
+    "n_tokens": 8,
+    "slot": 7
+  }
+]

@@ -1,0 +1,376 @@
+From 3ce44d373c3fe2b2f4c88f196f9d063d3eefb267 Mon Sep 17 00:00:00 2001
+From: newjordan <newjordan@gmail.com>
+Date: Wed, 12 Aug 2026 11:44:48 -0500
+Subject: [PATCH 2/2] sycl: skip masked SWA prefix in decode attention
+
+Assisted-by: Codex
+---
+ ggml/src/ggml-sycl/fattn-common.hpp | 180 ++++++++++++++++++++++++++--
+ ggml/src/ggml-sycl/fattn-vec.hpp    |  69 ++++++++---
+ 2 files changed, 220 insertions(+), 29 deletions(-)
+
+diff --git a/ggml/src/ggml-sycl/fattn-common.hpp b/ggml/src/ggml-sycl/fattn-common.hpp
+index 8b7c25ce4..94603906e 100644
+--- a/ggml/src/ggml-sycl/fattn-common.hpp
++++ b/ggml/src/ggml-sycl/fattn-common.hpp
+@@ -614,13 +614,15 @@ constexpr dequantize_V_t get_dequantize_V() {
+     }
+ }
+ 
+-template <int ncols1, int warp_size>
++template <int ncols1, int warp_size, bool store_KV_bounds>
+ static void flash_attn_mask_to_KV_max(const sycl::half2 * __restrict__ mask,
+                                       int * __restrict__ KV_max,
+                                       const int ne30,
+                                       const int s31,
+                                       const int s33,
+                                       int *     buf_iw) {
++    static_assert(!store_KV_bounds || ncols1 == 1, "KV bounds are decode-only");
++
+     auto      item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
+     const int ne31     = item_ct1.get_group_range(2);
+     const int tid      = item_ct1.get_local_id(2);
+@@ -664,11 +666,127 @@ static void flash_attn_mask_to_KV_max(const sycl::half2 * __restrict__ mask,
+     // In either case, walk back the decrementation by FATTN_KQ_STRIDE.
+     KV_max_sj += FATTN_KQ_STRIDE;
+ 
+-    if (item_ct1.get_local_id(2) != 0) {
+-        return;
++    if constexpr (store_KV_bounds) {
++        // Derive tile-aligned bounds from the mask because reused cache cells need not be stored in logical order.
++        // The attention mask still handles boundary tiles and interior holes.
++        int KV_min_sj = 0;
++        if (KV_max_sj > 0) {
++            // Global attention is live in tile 0.
++            const sycl::float2 first =
++                mask[tid].template convert<float, sycl::rounding_mode::automatic>();
++            const bool first_x_inf = sycl::isinf((float) first.x());
++            const bool first_y_inf = sycl::isinf((float) first.y());
++            int first_finite = !first_x_inf ? 2 * tid : (!first_y_inf ? 2 * tid + 1 : FATTN_KQ_STRIDE);
++            first_finite = sycl::reduce_over_group(
++                item_ct1.get_group(), first_finite, sycl::minimum<int>());
++
++            if (first_finite == FATTN_KQ_STRIDE) {
++                // Scan one half2 residue class per work-item. KV_max_sj is an exclusive tile boundary.
++                first_finite = KV_max_sj;
++                for (int ih = FATTN_KQ_STRIDE/2 + tid;
++                     ih < KV_max_sj/2;
++                     ih += FATTN_KQ_STRIDE/2) {
++                    const sycl::float2 cur =
++                        mask[ih].template convert<float, sycl::rounding_mode::automatic>();
++                    const bool x_inf = sycl::isinf((float) cur.x());
++                    const bool y_inf = sycl::isinf((float) cur.y());
++                    if (!x_inf || !y_inf) {
++                        first_finite = 2 * ih + (x_inf ? 1 : 0);
++                        break;
++                    }
++                }
++
++                first_finite = sycl::reduce_over_group(
++                    item_ct1.get_group(), first_finite, sycl::minimum<int>());
++                KV_min_sj = (first_finite / FATTN_KQ_STRIDE) * FATTN_KQ_STRIDE;
++            }
++        }
++
++        if (tid != 0) {
++            return;
++        }
++
++        const int ib = sequence * ne31 + jt;
++        KV_max[2 * ib + 0] = KV_min_sj;
++        KV_max[2 * ib + 1] = KV_max_sj;
++    } else {
++        if (tid != 0) {
++            return;
++        }
++
++        KV_max[sequence*ne31 + jt] = KV_max_sj;
+     }
++}
+ 
+-    KV_max[sequence*ne31 + jt] = KV_max_sj;
++template <int warp_size, int scan_wg>
++static void flash_attn_mask_to_KV_bounds(const sycl::half2 * __restrict__ mask,
++                                         int * __restrict__ KV_bounds,
++                                         const int ne30,
++                                         const int s31,
++                                         const int s33) {
++    static_assert(scan_wg % warp_size == 0, "scan work-group must contain full subgroups");
++
++    auto      item_ct1 = sycl::ext::oneapi::this_work_item::get_nd_item<3>();
++    const int ne31     = item_ct1.get_group_range(2);
++    const int tid      = item_ct1.get_local_id(2);
++    const int sequence = item_ct1.get_group(1);
++    const int jt       = item_ct1.get_group(2);
++
++    mask += sequence * s33 + jt * s31;
++
++    int KV_max_sj = (ne30 - 1) * FATTN_KQ_STRIDE;
++    for (; KV_max_sj >= 0; KV_max_sj -= FATTN_KQ_STRIDE) {
++        bool all_inf = true;
++        if (tid < FATTN_KQ_STRIDE / 2) {
++            const sycl::float2 cur =
++                mask[KV_max_sj / 2 + tid].template convert<float, sycl::rounding_mode::automatic>();
++            all_inf = sycl::isinf((float) cur.x()) && sycl::isinf((float) cur.y());
++        }
++        all_inf = sycl::all_of_group(item_ct1.get_group(), all_inf);
++        if (!all_inf) {
++            break;
++        }
++    }
++    KV_max_sj += FATTN_KQ_STRIDE;
++
++    int KV_min_sj = 0;
++    if (KV_max_sj > 0) {
++        int first_finite = FATTN_KQ_STRIDE;
++        if (tid < FATTN_KQ_STRIDE / 2) {
++            const sycl::float2 first =
++                mask[tid].template convert<float, sycl::rounding_mode::automatic>();
++            const bool first_x_inf = sycl::isinf((float) first.x());
++            const bool first_y_inf = sycl::isinf((float) first.y());
++            first_finite = !first_x_inf ? 2 * tid : (!first_y_inf ? 2 * tid + 1 : FATTN_KQ_STRIDE);
++        }
++        first_finite = sycl::reduce_over_group(
++            item_ct1.get_group(), first_finite, sycl::minimum<int>());
++
++        if (first_finite == FATTN_KQ_STRIDE) {
++            first_finite = KV_max_sj;
++            for (int ih = FATTN_KQ_STRIDE / 2 + tid;
++                 ih < KV_max_sj / 2;
++                 ih += scan_wg) {
++                const sycl::float2 cur =
++                    mask[ih].template convert<float, sycl::rounding_mode::automatic>();
++                const bool x_inf = sycl::isinf((float) cur.x());
++                const bool y_inf = sycl::isinf((float) cur.y());
++                if (!x_inf || !y_inf) {
++                    first_finite = 2 * ih + (x_inf ? 1 : 0);
++                    break;
++                }
++            }
++            first_finite = sycl::reduce_over_group(
++                item_ct1.get_group(), first_finite, sycl::minimum<int>());
++            KV_min_sj = (first_finite / FATTN_KQ_STRIDE) * FATTN_KQ_STRIDE;
++        }
++    }
++
++    if (tid == 0) {
++        const int ib = sequence * ne31 + jt;
++        KV_bounds[2 * ib + 0] = KV_min_sj;
++        KV_bounds[2 * ib + 1] = KV_max_sj;
++    }
+ }
+ 
+ template <int D, int ncols1, int ncols2>  // D == head size
+@@ -891,7 +1009,7 @@ static void lauch_kernel(
+     });
+ }
+ 
+-template <int DV, int ncols1, int ncols2, fattn_kernel_t fattn_kernel, int warp_size>
++template <int DV, int ncols1, int ncols2, fattn_kernel_t fattn_kernel, int warp_size, bool store_KV_bounds = false>
+ void launch_fattn(
+     ggml_backend_sycl_context & ctx, ggml_tensor * dst, const int nwarps, const size_t nbytes_shared,
+     const int nbatch_fa, const bool need_f16_K, const bool need_f16_V, const bool stream_k) {
+@@ -1010,20 +1128,58 @@ void launch_fattn(
+     // Optional optimization where the mask is scanned to determine whether part of the calculation can be skipped.
+     // Only worth the overhead if there is at lease one FATTN_KQ_STRIDE x FATTN_KQ_STRIDE square to be skipped or
+     //     multiple sequences of possibly different lengths.
+-    if (mask && K->ne[1] % FATTN_KQ_STRIDE == 0 && (Q->ne[1] >= 1024 || Q->ne[3] > 1)) {
++    if (mask && K->ne[1] % FATTN_KQ_STRIDE == 0 &&
++            (Q->ne[1] >= 1024 || Q->ne[3] > 1 || (store_KV_bounds && Q->ne[1] == 1))) {
+         const int s31 = mask->nb[1] / sizeof(sycl::half2);
+         const int s33 = mask->nb[3] / sizeof(sycl::half2);
+ 
+         const dpct::dim3 blocks_num_KV_max(ntiles_x, Q->ne[3], 1);
+-        const dpct::dim3 block_dim_KV_max(FATTN_KQ_STRIDE / 2, 1, 1);
+ 
+         const int ne_KV_max = blocks_num_KV_max.x*blocks_num_KV_max.y;
+         const int iter_k = K->ne[1] / FATTN_KQ_STRIDE;
+ 
+-        KV_max.alloc(ne_KV_max);
+-        {
+-            dpct::has_capability_or_fail(main_stream->get_device(), { sycl::aspect::fp16 });
+-
++        if constexpr (store_KV_bounds) {
++            KV_max.alloc(2 * ne_KV_max);
++        } else {
++            KV_max.alloc(ne_KV_max);
++        }
++        dpct::has_capability_or_fail(main_stream->get_device(), { sycl::aspect::fp16 });
++        if constexpr (store_KV_bounds) {
++            constexpr int scan_wg = 1024;
++            if (ggml_sycl_info().max_work_group_sizes[id] >= scan_wg) {
++                const dpct::dim3 block_dim_KV_bounds(scan_wg, 1, 1);
++                main_stream->submit([&](sycl::handler & cgh) {
++                    auto mask_data_ct0  = (const sycl::half2 *) mask->data;
++                    auto KV_max_ptr_ct1 = KV_max.ptr;
++
++                    cgh.parallel_for(
++                        sycl::nd_range<3>(blocks_num_KV_max * block_dim_KV_bounds, block_dim_KV_bounds),
++                        [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
++                            GGML_UNUSED(item_ct1);
++                            flash_attn_mask_to_KV_bounds<warp_size, scan_wg>(
++                                mask_data_ct0, KV_max_ptr_ct1, iter_k, s31, s33);
++                        });
++                });
++            } else {
++                const dpct::dim3 block_dim_KV_max(FATTN_KQ_STRIDE / 2, 1, 1);
++                main_stream->submit([&](sycl::handler & cgh) {
++                    sycl::local_accessor<int, 1> buf_iw_acc_ct1(sycl::range<1>(warp_size), cgh);
++
++                    auto mask_data_ct0  = (const sycl::half2 *) mask->data;
++                    auto KV_max_ptr_ct1 = KV_max.ptr;
++
++                    cgh.parallel_for(
++                        sycl::nd_range<3>(blocks_num_KV_max * block_dim_KV_max, block_dim_KV_max),
++                        [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
++                            GGML_UNUSED(item_ct1);
++                            flash_attn_mask_to_KV_max<ncols1, warp_size, store_KV_bounds>(
++                                mask_data_ct0, KV_max_ptr_ct1, iter_k, s31, s33,
++                                buf_iw_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
++                        });
++                });
++            }
++        } else {
++            const dpct::dim3 block_dim_KV_max(FATTN_KQ_STRIDE / 2, 1, 1);
+             main_stream->submit([&](sycl::handler & cgh) {
+                 sycl::local_accessor<int, 1> buf_iw_acc_ct1(sycl::range<1>(warp_size), cgh);
+ 
+@@ -1033,7 +1189,7 @@ void launch_fattn(
+                 cgh.parallel_for(sycl::nd_range<3>(blocks_num_KV_max * block_dim_KV_max, block_dim_KV_max),
+                                  [=](sycl::nd_item<3> item_ct1) [[sycl::reqd_sub_group_size(warp_size)]] {
+                                      GGML_UNUSED(item_ct1);
+-                                     flash_attn_mask_to_KV_max<ncols1, warp_size>(
++                                     flash_attn_mask_to_KV_max<ncols1, warp_size, false>(
+                                          mask_data_ct0, KV_max_ptr_ct1, iter_k, s31, s33,
+                                          buf_iw_acc_ct1.get_multi_ptr<sycl::access::decorated::no>().get());
+                                  });
+diff --git a/ggml/src/ggml-sycl/fattn-vec.hpp b/ggml/src/ggml-sycl/fattn-vec.hpp
+index 6b30f9d33..850feedd4 100644
+--- a/ggml/src/ggml-sycl/fattn-vec.hpp
++++ b/ggml/src/ggml-sycl/fattn-vec.hpp
+@@ -36,7 +36,8 @@ template <int D,
+           int type_V,
+           bool use_logit_softcap,
+           int warp_size,
+-          int nthreads>  // D == head size
++          int nthreads,
++          bool use_KV_bounds>  // D == head size
+ static void flash_attn_ext_vec(const char* __restrict__ Q,
+                         const char* __restrict__ K,
+                         const char* __restrict__ V,
+@@ -288,15 +289,36 @@ static void flash_attn_ext_vec(const char* __restrict__ Q,
+ #endif // GGML_SYCL_F16
+     }
+ 
+-    const int k_VKQ_max = KV_max ? KV_max[sequence * item_ct1.get_group_range(2) + item_ct1.get_group(2)] : ne11;
+-    K += item_ct1.get_group(1) * nthreads * nb11;
+-    V += item_ct1.get_group(1) * nthreads * nb21;
+-    maskh += item_ct1.get_group(1) * nthreads;
+-    for (int k_VKQ_0 = item_ct1.get_group(1) * nthreads; k_VKQ_0 < k_VKQ_max;
+-         k_VKQ_0 += item_ct1.get_group_range(1) * nthreads,
+-             // Increment pointers after each loop:
+-         K += item_ct1.get_group_range(1) * nthreads * nb11, V += item_ct1.get_group_range(1) * nthreads * nb21,
+-             maskh += item_ct1.get_group_range(1) * nthreads) {
++    int k_VKQ_0 = item_ct1.get_group(1) * nthreads;
++    int k_VKQ_max;
++    const int k_VKQ_stride = item_ct1.get_group_range(1) * nthreads;
++
++    if constexpr (use_KV_bounds) {
++        const int ib = sequence * item_ct1.get_group_range(2) + item_ct1.get_group(2);
++        const int k_VKQ_min = KV_max ? KV_max[2 * ib + 0] : 0;
++        k_VKQ_max = KV_max ? KV_max[2 * ib + 1] : ne11;
++
++        // Preserve each split's tile progression when skipping the masked prefix.
++        if (k_VKQ_0 < k_VKQ_min) {
++            k_VKQ_0 += ((k_VKQ_min - k_VKQ_0 + k_VKQ_stride - 1) / k_VKQ_stride) * k_VKQ_stride;
++        }
++
++        const int k_VKQ_ptr_0 = k_VKQ_0 < k_VKQ_max ? k_VKQ_0 : k_VKQ_max;
++        K += k_VKQ_ptr_0 * nb11;
++        V += k_VKQ_ptr_0 * nb21;
++        maskh += k_VKQ_ptr_0;
++    } else {
++        k_VKQ_max = KV_max ? KV_max[sequence * item_ct1.get_group_range(2) + item_ct1.get_group(2)] : ne11;
++        K += item_ct1.get_group(1) * nthreads * nb11;
++        V += item_ct1.get_group(1) * nthreads * nb21;
++        maskh += item_ct1.get_group(1) * nthreads;
++    }
++
++    for (; k_VKQ_0 < k_VKQ_max;
++         k_VKQ_0 += k_VKQ_stride,
++         // Increment pointers after each loop:
++         K += k_VKQ_stride * nb11, V += k_VKQ_stride * nb21,
++             maskh += k_VKQ_stride) {
+         // Calculate KQ tile and keep track of new maximum KQ values:
+         float KQ_reg[ncols]={}; // KQ in registers.
+         float KQ_max_new[ncols]={};
+@@ -581,7 +603,7 @@ static void flash_attn_ext_vec(const char* __restrict__ Q,
+ 
+ 
+ 
+-template <int D, int cols_per_block, int type_K, int type_V, bool use_logit_softcap>
++template <int D, int cols_per_block, int type_K, int type_V, bool use_logit_softcap, bool use_KV_bounds>
+ void ggml_sycl_flash_attn_ext_vec_case_impl(ggml_backend_sycl_context & ctx, ggml_tensor * dst) {
+ 
+     constexpr int warp_size = WARP_16_SIZE; //better performance than WARP_32_SIZE
+@@ -622,14 +644,14 @@ void ggml_sycl_flash_attn_ext_vec_case_impl(ggml_backend_sycl_context & ctx, ggm
+         }
+         launch_fattn<D, cols_per_block, 1,
+                      flash_attn_ext_vec<D, cols_per_block, type_K, type_V,
+-                                        use_logit_softcap, warp_size, nthreads_hw>, warp_size>(
++                                        use_logit_softcap, warp_size, nthreads_hw, use_KV_bounds>, warp_size, use_KV_bounds>(
+             ctx, dst, nwarps, nbytes_shared, nthreads_hw, need_f16_K, need_f16_V, false);
+     } else {
+         constexpr int nthreads_hw = 128;
+         constexpr int nwarps = nthreads_hw / warp_size;
+         launch_fattn<D, cols_per_block, 1,
+                      flash_attn_ext_vec<D, cols_per_block, type_K, type_V,
+-                                        use_logit_softcap, warp_size, nthreads_hw>, warp_size>(
++                                        use_logit_softcap, warp_size, nthreads_hw, use_KV_bounds>, warp_size, use_KV_bounds>(
+             ctx, dst, nwarps, nbytes_shared, D, need_f16_K, need_f16_V, false);
+     }
+ }
+@@ -644,12 +666,25 @@ void ggml_sycl_flash_attn_ext_vec_case(ggml_backend_sycl_context & ctx, ggml_ten
+ 
+     if (Q->ne[1] == 1) {
+         constexpr int cols_per_block = 1;
++        // Packed KV bounds are decode-only; disabled retains the scalar KV_max layout.
++        static const bool lx_decode_mask_bounds = []() {
++            const char * e = getenv("GGML_SYCL_LX_FATTN_DECODE_MASK_BOUNDS");
++            return e != nullptr && e[0] != '\0' && e[0] != '0';
++        }();
+         if (logit_softcap == 0.0f) {
+             constexpr bool use_logit_softcap = false;
+-            ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap>(ctx, dst);
++            if (lx_decode_mask_bounds) {
++                ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, true>(ctx, dst);
++            } else {
++                ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, false>(ctx, dst);
++            }
+         } else {
+             constexpr bool use_logit_softcap = true;
+-            ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap>(ctx, dst);
++            if (lx_decode_mask_bounds) {
++                ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, true>(ctx, dst);
++            } else {
++                ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, false>(ctx, dst);
++            }
+         }
+         return;
+     }
+@@ -657,10 +692,10 @@ void ggml_sycl_flash_attn_ext_vec_case(ggml_backend_sycl_context & ctx, ggml_ten
+     constexpr int cols_per_block = 2;
+     if (logit_softcap == 0.0f) {
+         constexpr bool use_logit_softcap = false;
+-        ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap>(ctx, dst);
++        ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, false>(ctx, dst);
+     } else {
+         constexpr bool use_logit_softcap = true;
+-        ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap>(ctx, dst);
++        ggml_sycl_flash_attn_ext_vec_case_impl<D, cols_per_block, type_K, type_V, use_logit_softcap, false>(ctx, dst);
+     }
+ }
+ 
+-- 
+2.43.0
+

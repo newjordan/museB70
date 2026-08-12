@@ -1,0 +1,2 @@
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2048
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)

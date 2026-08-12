@@ -1,0 +1,38 @@
+0.00.124.490 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.124.966 W srv  llama_server: -----------------
+0.00.124.968 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.124.968 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.124.969 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.124.969 W srv  llama_server: -----------------
+0.00.126.210 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.754.076 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.754.080 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.756.340 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.10.570.189 W llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-q4-k-ncols-hoist] active ncols_dst=2 ncols=6656 nrows=4096
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.29.954.765 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.29.958.116 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.29.958.147 I srv  llama_server: model loaded
+0.29.958.151 I srv  llama_server: listening on http://127.0.0.1:18098
+0.30.302.028 I slot get_availabl: id  0 | task -1 | selected slot by id (0)
+0.30.302.158 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+0.34.029.495 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =   8192, progress = 0.06, t =   3.73 s / 2197.83 tokens per second
+0.37.304.858 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  12288, progress = 0.10, t =   7.00 s / 1754.76 tokens per second
+0.40.890.337 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  16384, progress = 0.13, t =  10.59 s / 1547.39 tokens per second
+0.44.899.907 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  20480, progress = 0.16, t =  14.60 s / 1402.96 tokens per second
+0.49.123.340 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  24576, progress = 0.19, t =  18.82 s / 1305.76 tokens per second
+0.53.638.335 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  28672, progress = 0.22, t =  23.34 s / 1228.65 tokens per second
+0.58.485.994 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  32768, progress = 0.25, t =  28.18 s / 1162.65 tokens per second
+1.03.877.146 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  36864, progress = 0.29, t =  33.57 s / 1097.96 tokens per second
+1.09.344.583 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  40960, progress = 0.32, t =  39.04 s / 1049.12 tokens per second
+1.15.044.767 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  45056, progress = 0.35, t =  44.74 s / 1007.00 tokens per second
+1.21.585.406 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  49152, progress = 0.38, t =  51.28 s / 958.44 tokens per second
+1.28.054.333 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  53248, progress = 0.41, t =  57.75 s / 922.01 tokens per second
+1.34.766.879 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  57344, progress = 0.44, t =  64.46 s / 889.54 tokens per second
+1.41.717.273 I slot print_timing: id  0 | task 0 | prompt processing, n_tokens =  61440, progress = 0.48, t =  71.42 s / 860.32 tokens per second
+Received second interrupt, terminating immediately.
+LX_DIAG_COUNTS tiny=0 large=0 skip=0
+1.47.311.115 W srv          stop: cancel task, id_task = 0

@@ -1,0 +1,20 @@
+[
+  {
+    "content_bytes": 324,
+    "elapsed_s": 9.684443462996569,
+    "n_tokens": 64,
+    "slot": 0
+  },
+  {
+    "content_bytes": 294,
+    "elapsed_s": 9.68459736299701,
+    "n_tokens": 64,
+    "slot": 1
+  },
+  {
+    "content_bytes": 323,
+    "elapsed_s": 9.720967427005235,
+    "n_tokens": 64,
+    "slot": 2
+  }
+]

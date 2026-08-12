@@ -1,0 +1,132 @@
+{
+  "arithmetic_expected": true,
+  "gate_failures": [],
+  "gate_passed": true,
+  "greedy_quality_gate": {
+    "hard_gate": true,
+    "off_a_vs_off_b_content_equal": true,
+    "off_a_vs_off_b_tokens_equal": true,
+    "on_vs_off_a_content_equal": true,
+    "on_vs_off_a_tokens_equal": true,
+    "on_vs_off_b_content_equal": true,
+    "on_vs_off_b_tokens_equal": true,
+    "passed": true
+  },
+  "provenance_and_depth_gate": {
+    "cache_n": 129023,
+    "fixture_tokens_sha256": "893c12231ab1360f5f1d6ff0b78ab7568142e856b5526c27fd323a32dd35872e",
+    "kv": "f16/f16",
+    "n_ctx": 131072,
+    "n_slots": 1,
+    "passed": true,
+    "prompt_n": 1,
+    "requests_identical_across_arms": true,
+    "swa_full": true,
+    "token_count": 129024,
+    "truncated": false
+  },
+  "quality_probability_distances": {
+    "comparable": true,
+    "off_a_vs_off_b": {
+      "max_jensen_shannon": 0.002369559199632233,
+      "max_selected_logprob_delta": 0.03008437156677246,
+      "max_top_id_symmetric_difference": 10,
+      "max_top_n_tv_proxy": 0.0164771856297409,
+      "mean_jensen_shannon": 0.00034698293644458634,
+      "mean_selected_logprob_delta": 0.008092649965135479,
+      "mean_top_n_tv_proxy": 0.006232927505807295,
+      "rows": 32
+    },
+    "on_vs_off_a": {
+      "max_jensen_shannon": 0.0017297094694425147,
+      "max_selected_logprob_delta": 0.02135491371154785,
+      "max_top_id_symmetric_difference": 8,
+      "max_top_n_tv_proxy": 0.013403283795297385,
+      "mean_jensen_shannon": 0.000384702021357641,
+      "mean_selected_logprob_delta": 0.0062206755686133874,
+      "mean_top_n_tv_proxy": 0.005667503149470863,
+      "rows": 32
+    },
+    "on_vs_off_b": {
+      "max_jensen_shannon": 0.0018142283848165371,
+      "max_selected_logprob_delta": 0.04333007335662842,
+      "max_top_id_symmetric_difference": 10,
+      "max_top_n_tv_proxy": 0.020928080863731865,
+      "mean_jensen_shannon": 0.0004453833941311037,
+      "mean_selected_logprob_delta": 0.008668004056630707,
+      "mean_top_n_tv_proxy": 0.006554300271495416,
+      "rows": 32
+    }
+  },
+  "quality_probability_gate": {
+    "comparable": true,
+    "max_selected_logprob_delta": {
+      "absolute_limit": 0.1,
+      "baseline_off_a_vs_off_b": 0.03008437156677246,
+      "baseline_passed": true,
+      "candidate_absolute_passed": true,
+      "candidate_gate_enforced_relative_to_noise": true,
+      "candidate_relative_passed": true,
+      "candidate_worst_vs_either_off": 0.04333007335662842,
+      "effective_arithmetic_limit": 0.06016874313354492,
+      "noise_multiplier": 2.0,
+      "noise_relative_limit": 0.06016874313354492,
+      "passed": true
+    },
+    "max_top_n_tv_proxy": {
+      "absolute_limit": 0.05,
+      "baseline_off_a_vs_off_b": 0.0164771856297409,
+      "baseline_passed": true,
+      "candidate_absolute_passed": true,
+      "candidate_gate_enforced_relative_to_noise": true,
+      "candidate_relative_passed": true,
+      "candidate_worst_vs_either_off": 0.020928080863731865,
+      "effective_arithmetic_limit": 0.0329543712594818,
+      "noise_multiplier": 2.0,
+      "noise_relative_limit": 0.0329543712594818,
+      "passed": true
+    },
+    "mean_top_n_tv_proxy": {
+      "absolute_limit": 0.02,
+      "baseline_off_a_vs_off_b": 0.006232927505807295,
+      "baseline_passed": true,
+      "candidate_absolute_passed": true,
+      "candidate_gate_enforced_relative_to_noise": true,
+      "candidate_relative_passed": true,
+      "candidate_worst_vs_either_off": 0.006554300271495416,
+      "effective_arithmetic_limit": 0.01246585501161459,
+      "noise_multiplier": 2.0,
+      "noise_relative_limit": 0.01246585501161459,
+      "passed": true
+    },
+    "passed": true
+  },
+  "quality_probability_payload_exact_diagnostic": {
+    "off_a_vs_off_b": false,
+    "on_vs_off_a": false,
+    "on_vs_off_b": false
+  },
+  "sampled_ship_diagnostics": {
+    "hard_gate": false,
+    "note": "official sampling is seeded but process-level numerical noise can change sampled paths",
+    "off_a_vs_off_b_content_equal": false,
+    "off_a_vs_off_b_tokens_equal": false,
+    "on_vs_off_a_content_equal": false,
+    "on_vs_off_a_tokens_equal": false,
+    "on_vs_off_b_content_equal": false,
+    "on_vs_off_b_tokens_equal": false
+  },
+  "speed_gate": {
+    "max_off_spread_pct": 2.0,
+    "min_on_improvement_pct": 1.0,
+    "off_a_ship_tps": 10.587485509413142,
+    "off_b_ship_tps": 10.596634393016089,
+    "off_mean_ship_tps": 10.592059951214615,
+    "off_spread_pct": 0.08637492277314615,
+    "on_ship_tps": 17.291776780723723,
+    "on_vs_off_mean_pct": 63.25225556092926,
+    "passed": true,
+    "required_on_improvement_pct": 1.0,
+    "speed_noise_multiplier": 2.0
+  }
+}

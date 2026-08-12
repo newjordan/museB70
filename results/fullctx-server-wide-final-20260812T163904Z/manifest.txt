@@ -1,0 +1,15 @@
+timestamp_utc=2026-08-12T16:39:04Z
+bin=/home/frosty40/turbo/worktrees/muse-serve/build-smalln/bin
+repo_head=c317854233a9e4989fad7a68c03899314e0b11f1
+server_sha256=e5fd1ce0c482c960de820656340b2edb6d5a55a569145a25b29cb0668204f9b5
+sycl_sha256=d1eac74749440cca57b7e43824d8c57845cc77a0e1da2930b8354f38ba6e5b2c
+fixture=/home/frosty40/turbo/muse/results/fixtures/muse-wikitext-train-129024.tokens.json
+fixture_sha256=68560db05ec50fe34567d4079516c39e62412f9e80d0b033969461e426aa1b26
+ctx=131072
+slots=1
+b=4096
+ub=4096
+kv=f16/f16
+swa_full=1
+parallel_blocks=24
+decode_mask_bounds=1

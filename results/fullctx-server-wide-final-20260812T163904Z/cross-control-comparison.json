@@ -1,0 +1,45 @@
+{
+  "candidate_receipt": "/home/frosty40/turbo/muse/results/fullctx-server-wide-final-20260812T163904Z",
+  "control_receipt": "/home/frosty40/turbo/muse/results/fullctx-server-final-20260812T1605Z",
+  "gated_sycl_sha256": "d1eac74749440cca57b7e43824d8c57845cc77a0e1da2930b8354f38ba6e5b2c",
+  "promoted_sycl_sha256": "aa90882dc06d653c3f7a580ff6e1f34a5d84e02225eebcbf92cf243c0db69f06",
+  "source_commit": "3ce44d373",
+  "fixture_tokens_sha256": "893c12231ab1360f5f1d6ff0b78ab7568142e856b5526c27fd323a32dd35872e",
+  "greedy_content_equal_all": true,
+  "greedy_tokens_equal_all": true,
+  "on_vs_off_mean_pct": 79.68057149812431,
+  "probability_distances": {
+    "off_a_vs_off_b": {
+      "max_selected_logprob_delta": 0.03008437156677246,
+      "max_top_n_tv_proxy": 0.0164771856297409,
+      "mean_selected_logprob_delta": 0.008092649965135479,
+      "mean_top_n_tv_proxy": 0.006232927505807295
+    },
+    "on_final_vs_off_a": {
+      "max_selected_logprob_delta": 0.02237844467163086,
+      "max_top_n_tv_proxy": 0.013029384622672049,
+      "mean_selected_logprob_delta": 0.005544367010024587,
+      "mean_top_n_tv_proxy": 0.005475900776931706
+    },
+    "on_final_vs_off_b": {
+      "max_selected_logprob_delta": 0.051245927810668945,
+      "max_top_n_tv_proxy": 0.018135338586794007,
+      "mean_selected_logprob_delta": 0.007032389962084551,
+      "mean_top_n_tv_proxy": 0.006181247700732795
+    }
+  },
+  "probability_gate": {
+    "absolute_limits": {
+      "max_selected_logprob_delta": 0.1,
+      "max_top_n_tv_proxy": 0.05,
+      "mean_top_n_tv_proxy": 0.02
+    },
+    "arithmetic_noise_multiplier": 2.0,
+    "passed": true
+  },
+  "ship_tps": {
+    "off_a": 10.587485509413142,
+    "off_b": 10.596634393016089,
+    "on_final": 19.031873853766367
+  }
+}

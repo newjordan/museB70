@@ -1,0 +1,45 @@
+[serve-muse] 2026-08-12T05:27:48Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.157.769 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.158.208 W srv  llama_server: -----------------
+0.00.158.211 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.158.211 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.158.211 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.158.211 W srv  llama_server: -----------------
+0.00.159.441 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.785.009 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.785.021 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.788.220 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.585.790 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.589.105 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.589.140 I srv  llama_server: model loaded
+0.12.589.145 I srv  llama_server: listening on http://0.0.0.0:8095
+0.14.005.717 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.14.005.758 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.16.967.186 I slot print_timing: id  0 | task 0 | prompt eval time =    2695.08 ms /  2664 tokens (    1.01 ms per token,   988.47 tokens per second)
+0.16.967.190 I slot print_timing: id  0 | task 0 |        eval time =     266.32 ms /     8 tokens (   33.29 ms per token,    30.04 tokens per second)
+0.16.967.191 I slot print_timing: id  0 | task 0 |       total time =    2961.40 ms /  2672 tokens
+0.16.967.193 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.16.967.328 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.16.977.251 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 0.997
+0.16.977.276 I slot launch_slot_: id  0 | task 10 | processing task, is_child = 0
+0.16.977.282 W slot   operator(): id  0 | task 10 | need to evaluate at least 1 token for each active slot (n_past = 2664, task.n_tokens() = 2664)
+0.16.977.283 W slot   operator(): id  0 | task 10 | n_past was set to 2663
+0.17.316.799 I slot print_timing: id  0 | task 10 | prompt eval time =      87.75 ms /     1 tokens (   87.75 ms per token,    11.40 tokens per second)
+0.17.316.803 I slot print_timing: id  0 | task 10 |        eval time =     251.77 ms /     8 tokens (   31.47 ms per token,    31.78 tokens per second)
+0.17.316.804 I slot print_timing: id  0 | task 10 |       total time =     339.51 ms /     9 tokens
+0.17.316.804 I slot print_timing: id  0 | task 10 |    graphs reused =         15
+0.17.316.930 I slot      release: id  0 | task 10 | stop processing: n_tokens = 2671, truncated = 0
+0.17.325.982 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 0.759 (> 0.100 thold), f_keep = 0.757
+0.17.326.006 I slot launch_slot_: id  0 | task 19 | processing task, is_child = 0
+0.19.788.514 I slot print_timing: id  0 | task 19 | prompt eval time =    2204.19 ms /  2664 tokens (    0.83 ms per token,  1208.61 tokens per second)
+0.19.788.517 I slot print_timing: id  0 | task 19 |        eval time =     258.31 ms /     8 tokens (   32.29 ms per token,    30.97 tokens per second)
+0.19.788.518 I slot print_timing: id  0 | task 19 |       total time =    2462.50 ms /  2672 tokens
+0.19.788.518 I slot print_timing: id  0 | task 19 |    graphs reused =         21
+0.19.788.642 I slot      release: id  0 | task 19 | stop processing: n_tokens = 2671, truncated = 0
+0.19.796.704 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0

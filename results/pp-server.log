@@ -1,0 +1,270 @@
+[serve-muse] 2026-08-12T04:46:48Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.158.645 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.159.080 W srv  llama_server: -----------------
+0.00.159.082 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.159.082 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.159.082 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.159.083 W srv  llama_server: -----------------
+0.00.160.320 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.776.886 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.776.897 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.780.288 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.810.721 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.814.027 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.814.059 I srv  llama_server: model loaded
+0.12.814.063 I srv  llama_server: listening on http://0.0.0.0:8095
+0.14.010.946 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.14.010.977 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.57.864.173 I slot print_timing: id  0 | task 0 | prompt eval time =   43585.98 ms /  2664 tokens (   16.36 ms per token,    61.12 tokens per second)
+0.57.864.177 I slot print_timing: id  0 | task 0 |        eval time =     267.20 ms /     8 tokens (   33.40 ms per token,    29.94 tokens per second)
+0.57.864.177 I slot print_timing: id  0 | task 0 |       total time =   43853.18 ms /  2672 tokens
+0.57.864.179 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.57.864.314 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.57.874.214 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 0.997
+0.57.874.238 I slot launch_slot_: id  0 | task 10 | processing task, is_child = 0
+1.42.086.291 I slot print_timing: id  0 | task 10 | prompt eval time =   43956.64 ms /  2664 tokens (   16.50 ms per token,    60.61 tokens per second)
+1.42.086.294 I slot print_timing: id  0 | task 10 |        eval time =     255.40 ms /     8 tokens (   31.93 ms per token,    31.32 tokens per second)
+1.42.086.295 I slot print_timing: id  0 | task 10 |       total time =   44212.04 ms /  2672 tokens
+1.42.086.295 I slot print_timing: id  0 | task 10 |    graphs reused =         13
+1.42.086.416 I slot      release: id  0 | task 10 | stop processing: n_tokens = 2671, truncated = 0
+1.42.093.708 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:49:11Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.078.738 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.079.159 W srv  llama_server: -----------------
+0.00.079.161 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.079.161 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.079.161 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.079.162 W srv  llama_server: -----------------
+0.00.080.386 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.698.462 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.698.473 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.700.755 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.660.964 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.664.365 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.664.400 I srv  llama_server: model loaded
+0.12.664.405 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.993.989 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.994.020 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.57.948.212 I slot print_timing: id  0 | task 0 | prompt eval time =   43685.76 ms /  2664 tokens (   16.40 ms per token,    60.98 tokens per second)
+0.57.948.216 I slot print_timing: id  0 | task 0 |        eval time =     268.41 ms /     8 tokens (   33.55 ms per token,    29.80 tokens per second)
+0.57.948.216 I slot print_timing: id  0 | task 0 |       total time =   43954.17 ms /  2672 tokens
+0.57.948.218 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.57.948.358 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.57.955.819 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:50:10Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.071.581 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.072.027 W srv  llama_server: -----------------
+0.00.072.030 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.072.030 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.072.030 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.072.030 W srv  llama_server: -----------------
+0.00.073.276 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.699.925 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.699.938 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.702.236 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.637.353 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.640.769 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.640.803 I srv  llama_server: model loaded
+0.12.640.807 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.994.652 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.994.681 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.58.203.888 I slot print_timing: id  0 | task 0 | prompt eval time =   43941.01 ms /  2664 tokens (   16.49 ms per token,    60.63 tokens per second)
+0.58.203.892 I slot print_timing: id  0 | task 0 |        eval time =     268.18 ms /     8 tokens (   33.52 ms per token,    29.83 tokens per second)
+0.58.203.893 I slot print_timing: id  0 | task 0 |       total time =   44209.19 ms /  2672 tokens
+0.58.203.895 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.58.204.025 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.58.212.499 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:51:27Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.121.763 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.122.188 W srv  llama_server: -----------------
+0.00.122.189 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.122.190 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.122.190 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.122.190 W srv  llama_server: -----------------
+0.00.123.414 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.734.017 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.734.028 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.736.337 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.473.638 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'true'
+0.12.476.981 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.477.015 I srv  llama_server: model loaded
+0.12.477.019 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.998.544 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.998.578 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.58.105.539 I slot print_timing: id  0 | task 0 | prompt eval time =   43839.64 ms /  2664 tokens (   16.46 ms per token,    60.77 tokens per second)
+0.58.105.544 I slot print_timing: id  0 | task 0 |        eval time =     267.30 ms /     8 tokens (   33.41 ms per token,    29.93 tokens per second)
+0.58.105.545 I slot print_timing: id  0 | task 0 |       total time =   44106.94 ms /  2672 tokens
+0.58.105.547 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.58.105.698 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.58.113.139 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:52:26Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.069.269 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.069.712 W srv  llama_server: -----------------
+0.00.069.715 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.069.716 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.069.716 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.069.716 W srv  llama_server: -----------------
+0.00.070.951 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.711.162 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.711.174 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.713.431 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.677.417 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.680.743 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.680.776 I srv  llama_server: model loaded
+0.12.680.780 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.995.404 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.995.436 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.58.253.081 I slot print_timing: id  0 | task 0 | prompt eval time =   43989.98 ms /  2664 tokens (   16.51 ms per token,    60.56 tokens per second)
+0.58.253.085 I slot print_timing: id  0 | task 0 |        eval time =     267.63 ms /     8 tokens (   33.45 ms per token,    29.89 tokens per second)
+0.58.253.085 I slot print_timing: id  0 | task 0 |       total time =   44257.61 ms /  2672 tokens
+0.58.253.087 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.58.253.222 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.58.260.684 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:53:24Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.071.067 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.071.519 W srv  llama_server: -----------------
+0.00.071.521 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.071.521 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.071.522 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.071.522 W srv  llama_server: -----------------
+0.00.072.761 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.703.169 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.703.180 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.705.779 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+0.10.352.333 W llama_kv_cache_iswa: using full-size SWA cache (ref: https://github.com/ggml-org/llama.cpp/pull/13194#issuecomment-2868343055)
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.616.959 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.620.306 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.620.340 I srv  llama_server: model loaded
+0.12.620.344 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.997.648 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.997.679 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.58.381.335 I slot print_timing: id  0 | task 0 | prompt eval time =   44115.80 ms /  2664 tokens (   16.56 ms per token,    60.39 tokens per second)
+0.58.381.338 I slot print_timing: id  0 | task 0 |        eval time =     267.84 ms /     8 tokens (   33.48 ms per token,    29.87 tokens per second)
+0.58.381.339 I slot print_timing: id  0 | task 0 |       total time =   44383.64 ms /  2672 tokens
+0.58.381.341 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.58.381.473 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.58.388.774 I srv    operator(): operator(): cleaning up before exit...
+[serve-muse] 2026-08-12T04:56:53Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.143.973 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.144.410 W srv  llama_server: -----------------
+0.00.144.412 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.144.412 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.144.412 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.144.413 W srv  llama_server: -----------------
+0.00.145.646 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.779.180 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.779.191 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.781.551 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.747.498 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.751.080 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.751.115 I srv  llama_server: model loaded
+0.12.751.121 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.999.073 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.999.113 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.16.970.604 I slot print_timing: id  0 | task 0 | prompt eval time =    2703.06 ms /  2664 tokens (    1.01 ms per token,   985.55 tokens per second)
+0.16.970.608 I slot print_timing: id  0 | task 0 |        eval time =     268.41 ms /     8 tokens (   33.55 ms per token,    29.81 tokens per second)
+0.16.970.608 I slot print_timing: id  0 | task 0 |       total time =    2971.47 ms /  2672 tokens
+0.16.970.610 I slot print_timing: id  0 | task 0 |    graphs reused =          7
+0.16.970.741 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2671, truncated = 0
+0.16.980.864 I slot get_availabl: id  0 | task -1 | selected slot by LCP similarity, sim_best = 1.000 (> 0.100 thold), f_keep = 0.997
+0.16.980.889 I slot launch_slot_: id  0 | task 10 | processing task, is_child = 0
+0.19.445.697 I slot print_timing: id  0 | task 10 | prompt eval time =    2206.96 ms /  2664 tokens (    0.83 ms per token,  1207.09 tokens per second)
+0.19.445.700 I slot print_timing: id  0 | task 10 |        eval time =     257.83 ms /     8 tokens (   32.23 ms per token,    31.03 tokens per second)
+0.19.445.701 I slot print_timing: id  0 | task 10 |       total time =    2464.80 ms /  2672 tokens
+0.19.445.701 I slot print_timing: id  0 | task 10 |    graphs reused =         13
+0.19.445.821 I slot      release: id  0 | task 10 | stop processing: n_tokens = 2671, truncated = 0
+0.19.453.300 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0
+[serve-muse] 2026-08-12T04:57:55Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.083.838 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.084.265 W srv  llama_server: -----------------
+0.00.084.267 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.084.267 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.084.267 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.084.267 W srv  llama_server: -----------------
+0.00.085.495 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.692.381 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.692.393 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.694.669 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.475.629 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.478.938 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.478.975 I srv  llama_server: model loaded
+0.12.478.980 I srv  llama_server: listening on http://0.0.0.0:8095
+0.13.998.622 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.13.998.659 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.18.999.173 I slot print_timing: id  0 | task 0 | prompt eval time =    2706.49 ms /  2664 tokens (    1.02 ms per token,   984.30 tokens per second)
+0.18.999.176 I slot print_timing: id  0 | task 0 |        eval time =    2294.00 ms /    64 tokens (   35.84 ms per token,    27.90 tokens per second)
+0.18.999.177 I slot print_timing: id  0 | task 0 |       total time =    5000.49 ms /  2728 tokens
+0.18.999.179 I slot print_timing: id  0 | task 0 |    graphs reused =         63
+0.18.999.315 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2727, truncated = 0
+0.19.006.860 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0
+[serve-muse] 2026-08-12T04:58:14Z bin=/home/frosty40/turbo/worktrees/muse-serve/build/bin so_sha=f8da4229 ctx=131072 np=1 ub=4096 port=8095
+0.00.070.197 I cmn  common_param: common_params_print_info: verbosity = 3 (adjust with the `-lv N` CLI arg)
+0.00.070.614 W srv  llama_server: -----------------
+0.00.070.616 W srv  llama_server: CORS is set to allow all origins ('*') and no API key is set
+0.00.070.616 W srv  llama_server: this can be a security risk (cross-origin attacks)
+0.00.070.616 W srv  llama_server: more info: https://github.com/ggml-org/llama.cpp/pull/25655
+0.00.070.617 W srv  llama_server: -----------------
+0.00.071.864 I srv    load_model: loading model '/mnt/data2tb/benchmodels/muse-glimmer-30B-kquant-17gb.gguf'
+0.00.693.423 W load: setting token '<|message|>' (200023) attribute to USER_DEFINED (16), old attributes: 8
+0.00.693.435 W load: setting token '<|start|>' (200022) attribute to USER_DEFINED (16), old attributes: 8
+0.00.695.622 W load: special_eot_id is not in special_eog_ids - the tokenizer config may be incorrect
+[lx-control-rms] fuse hit (rms_norm+mul) ne0=6656 ne1=2
+[lx-control-rope] fuse hit (rope+view+set_rows) mode=0 ne0=128 ne1=2 type=f16
+[lx-control-dense-dual] fuse hit (shared gate+up+swiglu)
+0.12.452.839 I srv    load_model: initializing, n_slots = 1, n_ctx_slot = 131072, kv_unified = 'false'
+0.12.456.205 I srv          init: chat template supports preserving reasoning, consider enabling it via --reasoning-preserve
+0.12.456.239 I srv  llama_server: model loaded
+0.12.456.244 I srv  llama_server: listening on http://0.0.0.0:8095
+0.14.006.627 I slot get_availabl: id  0 | task -1 | selected slot by LRU, t_last = -1
+0.14.006.659 I slot launch_slot_: id  0 | task 0 | processing task, is_child = 0
+[lx-control-qkv] fuse hit q=reordered[4096] v=reordered[256] k=reordered[256] gate=-[0] ncols=6656
+[lx-control-fattn] vec nthreads=256 nbatch=256 single-block K (no combine, no dead WG)
+0.19.013.564 I slot print_timing: id  0 | task 0 | prompt eval time =    2712.99 ms /  2664 tokens (    1.02 ms per token,   981.94 tokens per second)
+0.19.013.568 I slot print_timing: id  0 | task 0 |        eval time =    2293.90 ms /    64 tokens (   35.84 ms per token,    27.90 tokens per second)
+0.19.013.568 I slot print_timing: id  0 | task 0 |       total time =    5006.89 ms /  2728 tokens
+0.19.013.571 I slot print_timing: id  0 | task 0 |    graphs reused =         63
+0.19.013.703 I slot      release: id  0 | task 0 | stop processing: n_tokens = 2727, truncated = 0
+0.19.020.913 I srv    operator(): operator(): cleaning up before exit...
+LX_DIAG_COUNTS tiny=0 large=0 skip=0
