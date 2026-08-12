@@ -61,8 +61,6 @@ curl -s localhost:8095/v1/chat/completions \
   -d '{"model":"muse-glimmer-30b-q4","messages":[{"role":"user","content":"hi"}],"max_tokens":128}'
 ```
 
-- One GPU client at a time. The xe driver wedges if you stack this with Laguna, treebeard, or a bench.
-- Localhost only. Use SSH or a TLS proxy for remote. Direct LAN HTTP is break-glass (`SERVE_ALLOW_INSECURE_NETWORK=1` + a mode-600 `SERVE_API_KEY_FILE`).
 - Muse thinks in `reasoning_content`. Echo **both** that and `content` on later turns, and give it enough `max_tokens` (128 is the smoke default).
 - Optional systemd template: `muse-b70.service` (not installed).
 
