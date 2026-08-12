@@ -5,7 +5,7 @@
 # muse
 
 Muse Glimmer 30B (Q4_K_M, 15.6 GB) on Intel Arc Pro B70. One seat, full 131k context.
-**Dense 28B** — not a Laguna/Qwen MoE. Every token rereads the whole 15.6 GB.
+**Dense 28B** 
 
 Serving package (script + template, weights stay on Meta):
 [Frosty40/Muse-Glimmer-30B-ArcB70-GGUF](https://huggingface.co/Frosty40/Muse-Glimmer-30B-ArcB70-GGUF)
