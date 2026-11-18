@@ -7,13 +7,23 @@
 #   https://github.com/newjordan/museB70/releases/tag/v2026.08.12-b70
 # Stock llama.cpp SYCL will load the model; the GGML_SYCL_LX_* knobs are no-ops there.
 #
-# Official weights (receipted file):
-#   hf download meta-models/Muse-Glimmer-30B-GGUF muse-glimmer-30B-kquant-17gb.gguf
+# Weights (receipted package file, repo above):
+#   hf download Frosty40/Muse-Glimmer-30B-ArcB70-GGUF \
+#     muse-glimmer-30B-kquant-17gb.gguf --local-dir .
 #   sha256 7e9b74b7c8875e9e265695df9613bf6290f2392e479ce740495a129019c488d8
+# Official kquant (auto-detected above) is Muse-Glimmer-30B-KQuant-17GB-Q4_K_M.gguf
+# from meta-models/Muse-Glimmer-30B-GGUF.
 set -euo pipefail
 
 HERE=$(cd "$(dirname "$0")" && pwd)
 LLAMA_BIN=${LLAMA_BIN:-llama-server}
+# The release binary's RUNPATH points at the build tree it came from; resolve
+# the bundled libs (libllama-server-impl.so, libggml-sycl.so.0, ...) from the
+# directory of LLAMA_BIN itself. Host oneAPI libs still come after it.
+if RESOLVED=$(readlink -f "$(command -v "$LLAMA_BIN" || echo "$LLAMA_BIN")" 2>/dev/null); then
+  BIN_DIR=$(dirname "$RESOLVED")
+  export LD_LIBRARY_PATH="$BIN_DIR${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+fi
 PORT=${SERVE_PORT:-8095}
 HOST=${SERVE_HOST:-127.0.0.1}
 NPARALLEL=${SERVE_NP:-1}

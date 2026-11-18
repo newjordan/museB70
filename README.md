@@ -23,7 +23,7 @@ Serving package: [Frosty40/Muse-Glimmer-30B-ArcB70-GGUF](https://huggingface.co/
 git clone https://github.com/newjordan/museB70.git
 cd museB70
 
-hf download Frosty40/Muse-Glimmer-30B-ArcB70-GGUF muse-glimmer-30B-kquant-17gb.gguf
+hf download Frosty40/Muse-Glimmer-30B-ArcB70-GGUF muse-glimmer-30B-kquant-17gb.gguf --local-dir .
 
 gh release download v2026.08.12-b70 --repo newjordan/museB70 \
   --pattern 'muse-serve-3ce44d373-linux-b70.tar.zst'
@@ -47,6 +47,8 @@ curl -s localhost:8095/v1/chat/completions \
 ```
 
 Muse thinks in `reasoning_content`. Echo both that and `content` on later turns, and give it enough `max_tokens`.
+
+The server needs the Intel oneAPI 2026.0 runtime on the host (SYCL, MKL, TBB); the launcher prepends the release's own `bin/` to `LD_LIBRARY_PATH` for the bundled libs.
 
 ---
 
